@@ -1,6 +1,15 @@
 --batch-file playlist.txt
 --output downloads/%(title)s_%(id)s.%(ext)s
 --continue
+# Use cookies if provided (see workflow)
+--cookies cookies.txt
+# Ensure a JS runtime is available for YouTube extraction
+--js-runtimes node
+# 2K (1440p) max video + best audio
+-f "bestvideo[height<=?1440]+bestaudio/best"
+# Only download items 1-25 from the playlist
+--playlist-start 1
+--playlist-end 25
 # --write-description
 # --write-info-json
 # --write-thumbnail

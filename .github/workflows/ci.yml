@@ -13,12 +13,26 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v3
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
       - name: download
         run: |
           git config --local user.email "justjavac@gmail.com"
           git config --local user.name "迷渡"
           git remote set-url origin https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
           git pull --rebase
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y ffmpeg
+          fi
+          if [ -n "${{ secrets.YT_COOKIES_BASE64 }}" ]; then
+            echo "${{ secrets.YT_COOKIES_BASE64 }}" | base64 -d > cookies.txt
+          else
+            touch cookies.txt
+          fi
           python3 -m pip install --upgrade yt-dlp
           yt-dlp --config-location config.txt
           git add .
