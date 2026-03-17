@@ -19,7 +19,8 @@ jobs:
           git config --local user.name "迷渡"
           git remote set-url origin https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
           git pull --rebase
-          ./bin/youtube-dl --config-location config.txt
+          python3 -m pip install --upgrade yt-dlp
+          yt-dlp --config-location config.txt
           git add .
-          git commit -m "download youtube video"
-          git push
+          git diff --quiet || git commit -m "download youtube video"
+          git diff --quiet || git push
